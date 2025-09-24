@@ -21,32 +21,36 @@ I implemented data augmentation on the training data for the minority classes, w
 - **F1 Score**: Harmonic mean of precision and recall
 - **Per-class Accuracy**: Class-wise performance
 ### Model Architectures
-1. VGG-like Model
+1. **VGG-like Model**
 - Simplified encoder-decoder without skip connections
 - Lighter architecture for faster training
 - Good baseline performance
 
-2. Lightweight EfficientNet U-Net 
+2. **Lightweight EfficientNet U-Net** 
 - EfficientNet-B0 as the encoder (pretrained on ImageNet)
 - Custom U-Net decoder with skip connections
 - Lightweight design for faster training
 ### Loss Function
 
-Combined *binary_crossentropy* and *dice loss*. *Dice Loss* is a segmentation loss function based on the Dice Coefficient (also known as F1 Score for binary classification). It's particularly effective for handling class imbalance in segmentation tasks like steel defect detection.
+Combined loss of *binary_crossentropy* and *dice loss* is used. *Dice Loss* is a segmentation loss function based on the Dice Coefficient (also known as F1 Score for binary classification). It's particularly effective for handling class imbalance in segmentation tasks like steel defect detection.
 
 ### Performance Optimization
 
-Preventing Overfitting: 
+Overfitting Mitigation Strategies:
 
- - **Early Stopping**: Monitors validation IoU with patience=3
- - **Learning Rate Reduction**: Reduces LR by 50% when validation plateaus
- - **Dropout**: Applied in decoder layers (0.1-0.3)
- - **Batch Normalization**: Stabilizes training
- - **Data Augmentation**: Horizontal/vertical flips, brightness adjustment
+- Early Stopping: Halt training if validation IoU doesn’t improve after 3 epochs.
+
+- Learning Rate Scheduling: Halve the learning rate when validation performance plateaus.
+
+- Dropout: Applied (rate 0.1–0.3) in decoder layers to reduce co-adaptation.
+
+- Batch Normalization: Improves stability and generalization.
+
+- Data Augmentation: Includes flips and brightness variations to expand training diversity.
 
 ## Model Evaluation
 
-| Model | Val IoU | Val Dice |Val Recall | f1 | training time |
+| Model | Val IoU | Val Dice |Val Recall | F1 Score | Training time |
 |-------|---------|----------|-----------|----|---------------|
 | VGG-like | 0.62 | 0.90| 0.61 | 0.73| faster |
 | EfficientNet U-Net | 0.60 | 0.90 | 0.62 | 0.72 | slower|
